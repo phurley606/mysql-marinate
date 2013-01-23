@@ -1,7 +1,19 @@
 1. When would you use a weak entity?
 
+A weak entity (child) is a sub-ordinate entity of another entity (parent).
+It is partially identified by reference to its parent.
+For example if I ordered 3 items from Amazon at the same time, then each of those items is a weak entity
+with the order itself as their parent. 
+To identify each order item we need the identifier of the parent order 
+combined with further details to identify each individual item (e.g. order item number).
+
 
 2. Is it better to use entities instead of attributes?
+
+We need to use both entities and attributes to model the real world in computer systems.
+An entity is an object we are interested in and an attribute describes an aspect of it.
+For example, a system used in a book shop, could have an entity named Book with attributes 
+identifying a given book's title, author and publication date.
 
 
 3. Alter and extend the music database ER model so that it can store 
