@@ -24,6 +24,7 @@ identifying a book's title, author and publication date.
 compilations, where a compilation is an album that contains tracks by two 
 or more different artists.
 
+The file "Learning MySQL 4-3.jpg" contains my entity relationship model for this question.
 
 Album:
 Remove artist_id and foreign key to Artist
