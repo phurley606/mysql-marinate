@@ -139,7 +139,7 @@ update track set time = 6.22 where track_name = 'Original' and artist_id = 7 and
 
 
 
-6) Remove the 'Bonus Track' from the Leftism album'
+6) Remove the 'Bonus Track' from the Leftism album
 
 delete from track where track_name = 'Bonus Track' and artist_id = 7 and album_id = 1;
 
