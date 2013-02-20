@@ -14,15 +14,93 @@ can store this information, and explain the advantages and disadvantages of your
 design. Choose the column types you need, explaining the advantages and disad-
 vantages of your choices.
 
+
+Artists
+
+I thought the most flexible way to store artist collaborators was to also hold them in
+the Artist table. This allows an artist to collaborate with another artist and allows
+us to store details of albums by the collaborators. To store the details of a 
+collaboration between two artists I created a Collaboration table, which resolves the
+artist/collaborator many-to-many relationship on the Artist table to itself. On this 
+table one artist is identified as the main artist and another as the collaborator.
+
+CREATE TABLE collaboration (
+main_artist_id SMALLINT(5) NOT NULL,
+collaborator_id SMALLINT(5) NOT NULL,
+collaborator_role CHAR(50) DEFAULT NULL,
+start_date DATE NOT NULL,
+end_date DATE DEFAULT NULL,
+PRIMARY KEY (main_artist_id, collaborator_id),
+CONSTRAINT collab_artistmain FOREIGN KEY (main_artist_id) REFERENCES artist (artist_id),
+CONSTRAINT collab_artistcollab FOREIGN KEY (collaborator_id) REFERENCES artist (artist_id));
+
+To create a drummer who started collaborating with Kylie Minogue on 1st April 2013:
+
+INSERT INTO artist VALUES (7,'Animal');
+
+INSERT INTO collaboration VALUES (6,7,'Drummer','2013-04-01',NULL);
+
+
+Albums
+
+The extra information required for albums can simply be added to the Album table.
+
+ALTER TABLE album ADD (
+producer_name CHAR(128) DEFAULT NULL,
+release_date DATE DEFAULT NULL,
+recording_location CHAR(128) DEFAULT NULL);
+
+This has the disadvantage of rows potentially duplicating data for the producer name and
+the recording location. A more complex solution would involve creating separate tables to 
+store album producer and recording studio data, with foreign keys to these tables from 
+the Album table.
+
+
 2. There are five types for storing temporal data: DATETIME, DATE, TIME, YEAR, and
 TIMESTAMP. Explain what each is used for, and give an example of a situation in
 which you would choose to use it. Note that http://palominodb.com/blog/2011/05/23/datetime-vs-timestamp
 has some useful information too.
 
+DATETIME
+Stores a date and time pair in the format YYYY-MM-DD HH:MM:SS. This could be
+used to record the date and time at which an event occurred, e.g. a criminal
+offence.
+
+DATE
+Stores a date in the format YYYY-MM-DD. An example of its use would be to
+store the beginning or end of a tax year.
+
+TIME
+Stores a time in the format HHH:MM:SS. This is useful for storing the
+elapsed time of an event.
+
+YEAR
+Stores a year (in either 2 or 4 digits). An example of its use would be to store
+the year in which a particular event occurred, e.g. the Olympics.
+
+TIMESTAMP
+Stores a date and time pair in the format YYYY-MM-DD HH:MM:SS. If set to null, 
+the current date and time is stored. One timestamp column in a table can be
+defined to automatically be set to the current date and time on insert and/or
+update of a row. A good use of such an automatically updating timestamp would
+be for a column to audit the last time a row was modified.
+ 
+
+
 3. You’ve decided to use the AUTO_INCREMENT feature. List the three requirements that
 must be met by the column you’re applying it to.
 
+it must be indexed;
+it must not have a default value defined;
+it must be the only column in the table defined to automatically increment.
+
+
 4. Why can only one column in a table have the AUTO_INCREMENT feature?
+
+I have no idea. Because the MySQL engineers designed it that way? However I cannot 
+think of any reasons why you would want more than one auto-increment field; I think
+it will usually be used to generate primary key values.
+
 
 5. Using the monitor, create a table with the following statement:
 mysql> CREATE TABLE exercise (field1 INT(3));
@@ -30,3 +108,9 @@ Using the ALTER TABLE statement, make field1 the primary key, carrying out any
 additional steps you need to make this possible. Add a second column, field2, of
 type CHAR(64) with a DEFAULT 5 clause. Create an index on a prefix of 10 characters
 from field2.
+
+ALTER TABLE exercise MODIFY field1 INT(3) NOT NULL;
+ALTER TABLE exercise ADD PRIMARY KEY (field1);
+ALTER TABLE exercise ADD (field2 CHAR(64));
+ALTER TABLE exercise ADD INDEX field2_prefix (field2(10));
+
