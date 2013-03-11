@@ -143,9 +143,9 @@ between the two sets (i.e. tables) or they do not; the order of defining the set
 about using join conditions in the ON clause versus in the WHERE clause
 for LEFT (and RIGHT) JOINs?
 
-SELECT track_name, track.album_id, COUNT(played)
+SELECT track_name, track.album_id, COUNT(played) 
 FROM track
-LEFT JOIN played ON (track.track_id=played.track_id
+LEFT JOIN played ON (track.track_id=played.track_id 
 AND track.album_id=played.album_id)
 WHERE track.artist_id=3
 GROUP BY track_name, track.album_id;
@@ -157,6 +157,7 @@ WHERE track.track_id=played.track_id
 AND track.artist_id=3
 GROUP BY track_name, track.album_id;
 
+
 Both of these queries are performing a left outer join between the track and played
 tables, i.e. they aim to return rows from the track table which do not have a 
 match in the played table. The first query succeeds in this. However the second
@@ -166,8 +167,6 @@ played table because it has the 'WHERE track.track_id=played.track_id' clause
 
 For an outer join to succeed the join conditions should be specified in the ON
 clause rather than the WHERE clause.
-
-
 
 
 
